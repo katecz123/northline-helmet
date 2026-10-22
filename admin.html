@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Northline Control</title>
+  <style>
+    :root{font-family:Arial,Helvetica,sans-serif;color:#161816;background:#e8e9df}*{box-sizing:border-box}body{margin:0}.bar{height:72px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;background:#151715;color:#f5f5ef}.brand{font-size:21px;font-weight:900;letter-spacing:-1.7px}.brand span{font-weight:300}.back{color:#d6ff00;text-decoration:none;font-size:10px;font-weight:800;letter-spacing:1px}.wrap{max-width:1220px;margin:auto;padding:70px 5vw}h1{font-size:clamp(54px,8vw,108px);letter-spacing:-.09em;line-height:.8;margin:0 0 52px}h1 em{font-family:Georgia,serif;font-weight:400}.eyebrow{font-size:10px;letter-spacing:1.4px;font-weight:800;margin:0 0 17px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.stat{padding:24px;background:#151715;color:#f7f7ef}.stat span{display:block;color:#b9bcb2;font-size:9px;letter-spacing:1.2px;font-weight:800}.stat strong{font-size:clamp(42px,6vw,70px);letter-spacing:-3px;display:block;margin:20px 0 5px}.stat small{font-size:10px;color:#b9bcb2}.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-top:14px}.card{background:#f8f8f2;padding:27px}.card h2{font-size:22px;margin:0 0 22px;letter-spacing:-.8px}.chart{height:190px;display:flex;align-items:end;gap:9px;border-bottom:1px solid #babcaf;padding-top:18px}.chart div{flex:1;display:grid;gap:7px;text-align:center;font-size:9px;color:#686a64}.chart i{display:block;background:#d6ff00;border:1px solid #151715;min-height:15px}.note{font-size:12px;line-height:1.5;color:#60625c}.products{margin-top:14px}.product{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;border-top:1px solid #d4d6ce;padding:16px 0}.product p,.product small{margin:0}.product p{font-size:15px;font-weight:800}.product small{font-size:10px;color:#70716b}.delete{border:0;background:none;color:#a72720;font-weight:800;font-size:10px;letter-spacing:.7px;cursor:pointer}.form{display:grid;grid-template-columns:1fr 1fr auto;gap:9px}.form input{min-height:43px;border:1px solid #aeb0a8;padding:0 12px;font:inherit;font-size:12px}.form button{border:0;background:#151715;color:#f7f7ef;padding:0 20px;font-weight:800;font-size:10px;letter-spacing:1px;cursor:pointer}.flag{margin:17px 0 0;font-size:10px;letter-spacing:.6px;color:#686a64}@media(max-width:720px){.bar{height:62px;padding:0 20px}.wrap{padding:58px 20px}.stats,.grid{grid-template-columns:1fr}.form{grid-template-columns:1fr}.form button{height:43px}h1{margin-bottom:38px}}
+  </style>
+</head>
+<body>
+  <header class="bar"><div class="brand">NORTH<span>LINE</span> / CONTROL</div><a class="back" href="./">← VIEW WEBSITE</a></header>
+  <main class="wrap">
+    <p class="eyebrow">ADMIN DASHBOARD / STATIC PREVIEW</p>
+    <h1>CONTROL<br><em>ROOM.</em></h1>
+    <section class="stats">
+      <article class="stat"><span>VISITS / 7 DAYS</span><strong id="visits">1,284</strong><small>+18% vs. last week</small></article>
+      <article class="stat"><span>WHATSAPP INQUIRIES</span><strong id="inquiries">43</strong><small>Contact-button clicks</small></article>
+      <article class="stat"><span>PRODUCT VIEWS</span><strong id="views">3,906</strong><small>Collection activity</small></article>
+    </section>
+    <section class="grid">
+      <article class="card"><h2>Traffic overview</h2><div class="chart" aria-label="Weekly visits chart"><div><i style="height:37%"></i>MON</div><div><i style="height:61%"></i>TUE</div><div><i style="height:44%"></i>WED</div><div><i style="height:77%"></i>THU</div><div><i style="height:59%"></i>FRI</div><div><i style="height:92%"></i>SAT</div><div><i style="height:68%"></i>SUN</div></div></article>
+      <article class="card"><h2>What this public demo does</h2><p class="note">The GitHub Pages edition is a visual management preview. Products added here are stored only in this browser so you can demonstrate the interaction without exposing any server credentials.</p><p class="note">For real shared analytics, order data and product management, deploy the FastAPI + MySQL service separately and point this screen to its API.</p></article>
+    </section>
+    <section class="card products"><h2>Products</h2><div id="productList"></div><form id="productForm" class="form"><input id="name" required placeholder="Product name"><input id="price" required placeholder="Price, e.g. $299"><button type="submit">ADD PRODUCT</button></form><p class="flag">DEMO MODE · data is saved locally in this browser only</p></section>
+  </main>
+  <script>
+    const key='northline-admin-products';
+    const defaults=[['VECTOR ONE','$289'],['TERRA X','$319'],['APEX R','$349']];
+    let products=JSON.parse(localStorage.getItem(key)||'null')||defaults;
+    const list=document.querySelector('#productList');
+    function save(){localStorage.setItem(key,JSON.stringify(products))}
+    function render(){list.innerHTML=products.map((p,i)=>`<div class="product"><div><p>${p[0]}</p><small>HELMET / ${p[1]}</small></div><button class="delete" data-index="${i}">REMOVE</button></div>`).join('');document.querySelectorAll('.delete').forEach(b=>b.onclick=()=>{products.splice(+b.dataset.index,1);save();render()})}
+    document.querySelector('#productForm').onsubmit=e=>{e.preventDefault();products.unshift([document.querySelector('#name').value.trim(),document.querySelector('#price').value.trim()]);save();e.target.reset();render()};
+    render();
+  </script>
+</body>
+</html>
